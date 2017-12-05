@@ -7,16 +7,14 @@
 #include <cmath>
 #include "viscosity.h"
 #include "nlopt.hpp"
+#include "utils.h"
 
 // Time step
-#define DT 0.01
+#define DT 0.001
+
+// MUST FIND A WAY TO PASS GAMMA AND ME TO DERIV.
 
 // Global variables
-double ReL = 300000.0;
-double L = 4.0;  // m
-double Me = 2.0;
-double g = 1.4;
-double Te = 100.0;      // [K]
 std::vector<std::array<double,6> > state_hist;
 
 //-------------------------------------------------------------------
@@ -92,6 +90,10 @@ double integrate(const int i, const double rhoe, const double nue, const double 
 //-------------------------------------------------------------------
 
 int main() {
+
+  // Reading inputs from file
+  std::string inputFile("input");
+  input_data<double> inp = read_input_file<double>(inputFile);
 
   // Inputs
   int size;
