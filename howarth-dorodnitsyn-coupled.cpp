@@ -104,22 +104,22 @@ int main() {
   std::vector<double> T, rho, y, eta_vec;
 
   // Finding freestream properties
-  Ue = Me*sqrt(g*R*Te);
+  Ue = inp.Me*sqrt(inp.g*R*inp.Te);
 
   // Computing the state using the Reynolds number
-  rhoe = mu<double>(Te)*ReL/(Ue*L);
-  nue = mu<double>(Te)/rhoe;
-  pe = rhoe*R*Te;
+  rhoe = mu<double>(inp.Te)*inp.ReL/(Ue*inp.L);
+  nue = mu<double>(inp.Te)/rhoe;
+  pe = rhoe*R*inp.Te;
   std::cout << "pe = " << pe << " Pa" << std::endl;
 
   // Finding adiabatic wall temp
-  cp = g*R/(g - 1.0);
+  cp = inp.g*R/(inp.g - 1.0);
   double* Tw;
-  double tmp = Te + Ue*Ue/(2.0*cp);
+  double tmp = inp.Te + Ue*Ue/(2.0*cp);
   Tw = &tmp;
 
   // Outputting some info
-  std::cout << "Te = " <<  Te << " K\n";
+  std::cout << "Te = " <<  inp.Te << " K\n";
   std::cout << "Tw = " << *Tw << " K\n";
   std::cout << "Ue = " <<  Ue << " m/s\n";
 
@@ -158,7 +158,7 @@ int main() {
   for (int i=0; i<size; ++i) {
     //outfile << y[i] << " " << y[i]*sqrt(Ue/(2.0*nue*x)) << " "
     outfile << y[i] << " " << y[i]*sqrt(Ue/(nue*x)) << " "
-      << state_hist[i][2] << " " << T[i]/Te << " " << eta_vec[i] << "\n";
+      << state_hist[i][2] << " " << T[i]/inp.Te << " " << eta_vec[i] << "\n";
   }
   outfile.close();
 
