@@ -6,5 +6,5 @@ LIBS=-lnlopt
 
 all: howarth-dorodnitsyn-coupled
 
-howarth-dorodnitsyn-coupled: howarth-dorodnitsyn-coupled.cpp 
+howarth-dorodnitsyn-coupled: howarth-dorodnitsyn-coupled.cpp
 	$(CXX) -o $@ $(CXXFLAGS) -I$(INCLUDE) $(CPPFLAGS) $< $(LIBS)

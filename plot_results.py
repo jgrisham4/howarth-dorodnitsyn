@@ -23,7 +23,7 @@ i = 0
 ydata = []
 Tdata = []
 for Mnum in M:
-    d = np.genfromtxt("results{}.dat".format(Mnum), skip_header=1)
+    d = np.genfromtxt("results.dat".format(Mnum), skip_header=1)
     plt.plot(d[:, 1], d[:, 2], markers[i], label=r"$M_e = {}$".format(Mnum), lw=1.5)
     ydata.append(d[:, 1])
     Tdata.append(d[:, 3])
@@ -45,12 +45,7 @@ plt.xlim([0.0, 14.0])
 #plt.legend()
 plt.tight_layout()
 
-fig1.savefig("../report/images/uqUe.pdf")
-fig2.savefig("../report/images/TqTe.pdf")
+#fig1.savefig("../report/images/uqUe.pdf")
+#fig2.savefig("../report/images/TqTe.pdf")
 
-comprehensive_images = "/home/James/Desktop/School/comprehensive/proposal/images"
-fig1.savefig("{}/howarth-uqUe.pdf".format(path_dis))
-fig2.savefig("{}/howarth-TqTe.pdf".format(path_dis))
-
-#plt.show()
-
+plt.show()

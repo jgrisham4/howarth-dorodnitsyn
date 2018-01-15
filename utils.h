@@ -46,7 +46,7 @@ input_data<T> read_input_file(const std::string& input_file) {
         iss.clear();
         std::cout << "Reynolds number: " << tmp.ReL << std::endl;
       }
-      if (line.find("L")!=std::string::npos) {
+      if (line.find("lref")!=std::string::npos) {
         iss.str(line);
         iss >> token >> tmp.L;
         iss.clear();

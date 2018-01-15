@@ -12,10 +12,10 @@
 // Time step
 #define DT 0.001
 
-// MUST FIND A WAY TO PASS GAMMA AND ME TO DERIV.
-
 // Global variables
 std::vector<std::array<double,6> > state_hist;
+input_data<double> inp = read_input_file<double>("input");
+
 
 //-------------------------------------------------------------------
 // First-order form of the equation
@@ -28,7 +28,7 @@ void deriv(const std::vector<double>& f, std::vector<double>& dfdeta, double eta
   dfdeta[1] = f[2];
   dfdeta[2] = -f[0]*f[2];
   dfdeta[3] = f[4];
-  dfdeta[4] = -f[0]*f[4] - (g-1.0)*Me*Me*Te*f[2]*f[2];
+  dfdeta[4] = -f[0]*f[4] - (inp.gamma-1.0)*inp.Me*inp.Me*inp.Te*f[2]*f[2];
 
 }
 
@@ -62,7 +62,7 @@ double solve_ode(const std::vector<double>& X, std::vector<double>& gradX, void*
   size_t steps = boost::numeric::odeint::integrate_const(stepper,deriv,state,0.0,4.5,DT,output);
 
   // Returning objective function
-  return pow(state[1]-1.0,2) + pow(state[3]-Te,2);
+  return pow(state[1]-1.0,2) + pow(state[3]-inp.Te,2);
 
 }
 
@@ -71,14 +71,14 @@ double solve_ode(const std::vector<double>& X, std::vector<double>& gradX, void*
 //-------------------------------------------------------------------
 
 double integrate(const int i, const double rhoe, const double nue, const double Ue, const double x, const std::vector<double>& eta, const std::vector<double>& T) {
-  
+
   double sum=0.0;
   double Yim1,Yi;
 
   for (int j=0; j<i; ++j) {
     Yim1 = eta[j]*sqrt(2.0*nue*x/Ue);
     Yi   = eta[j+1]*sqrt(2.0*nue*x/Ue);
-    sum += 0.5*(T[j+1]/Te + T[j]/Te)*(Yi - Yim1);
+    sum += 0.5*(T[j+1]/inp.Te + T[j]/inp.Te)*(Yi - Yim1);
   }
 
   return sum;
@@ -91,10 +91,6 @@ double integrate(const int i, const double rhoe, const double nue, const double 
 
 int main() {
 
-  // Reading inputs from file
-  std::string inputFile("input");
-  input_data<double> inp = read_input_file<double>(inputFile);
-
   // Inputs
   int size;
   double R = 287.0;       // [J/(kg K)]
@@ -104,7 +100,7 @@ int main() {
   std::vector<double> T, rho, y, eta_vec;
 
   // Finding freestream properties
-  Ue = inp.Me*sqrt(inp.g*R*inp.Te);
+  Ue = inp.Me*sqrt(inp.gamma*R*inp.Te);
 
   // Computing the state using the Reynolds number
   rhoe = mu<double>(inp.Te)*inp.ReL/(Ue*inp.L);
@@ -113,7 +109,7 @@ int main() {
   std::cout << "pe = " << pe << " Pa" << std::endl;
 
   // Finding adiabatic wall temp
-  cp = inp.g*R/(inp.g - 1.0);
+  cp = inp.gamma*R/(inp.gamma - 1.0);
   double* Tw;
   double tmp = inp.Te + Ue*Ue/(2.0*cp);
   Tw = &tmp;
